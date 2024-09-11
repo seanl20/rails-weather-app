@@ -1,0 +1,10 @@
+
+<div>
+  <p><%= Date.today.strftime("%A, %d %B %Y") %></p>
+  <img src="<%= @icon_url %>">
+  <p><%= @data["weather"].first["main"] %></p>
+  <p><strong>Description:</strong></p>
+  <p><%= @data["weather"].first["description"] %></p>
+  <p><strong>Temperature:</strong></p>
+  <p><%= @data["main"]["temp"] %> Celcius</p>
+</div>
