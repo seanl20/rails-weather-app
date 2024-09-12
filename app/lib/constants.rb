@@ -1,3 +1,5 @@
 module Constants
-  API_KEY = "cbd1d7cb296f339c1dab6d1c7ad9ae64&units=metric"
+  OPEN_WEATHER_URL = "https://api.openweathermap.org/data/2.5/weather"
+  OPEN_WEATHER_ICON_URL = "https://openweathermap.org/img/wn/"
+  API_KEY = ENV["OPEN_WEATHER_API_KEY"]
 end

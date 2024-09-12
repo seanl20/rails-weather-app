@@ -1,17 +1,41 @@
+# frozen_string_literal: true
+
 module Queries
   class GetWeather
-    require 'net/http'
+    def call(latitude:, longitude:, units: "metric")
+      # url = "lat=&lon=&appid=#{Constants::API_KEY}"
 
-    def call
-      url = "https://api.openweathermap.org/data/2.5/weather?lat=-27.4705&lon=153.0260&appid=#{Constants::API_KEY}"
+      uri = build_uri(longitude:, latitude:, units:)
 
-      uri = URI(url)
-      res = Net::HTTP.get_response(uri)
-      # puts res.body if res.is_a?(Net::HTTPSuccess)
-      response_json = JSON.parse(res.body)
-      icon_url = "https://openweathermap.org/img/wn/#{response_json["weather"].first["icon"]}@2x.png"
-      
+      response_json = json_parse_response(uri:)
+
+      icon_url = build_icon_url(response_json)
+
       return response_json, icon_url
+    end
+
+    def build_uri(longitude:, latitude:, units:)
+      uri = URI(Constants::OPEN_WEATHER_URL)
+
+      params = {
+        lat: latitude,
+        lon: longitude,
+        appid: Constants::API_KEY,
+        units:
+      }
+
+      uri.query = URI.encode_www_form(params)
+
+      return uri
+    end
+
+    def json_parse_response(uri:)
+      response = Net::HTTP.get_response(uri)
+      response_json = JSON.parse(response.body)
+    end
+
+    def build_icon_url(response)
+      icon_url = "https://openweathermap.org/img/wn/#{response["weather"].first["icon"]}@2x.png"
     end
   end
 end
