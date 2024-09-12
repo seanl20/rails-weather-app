@@ -11,7 +11,7 @@ module Queries
 
       icon_url = build_icon_url(response_json)
 
-      return response_json, icon_url
+      build_weather_struct(response_json:, icon_url:)
     end
 
     def build_uri(longitude:, latitude:, units:)
@@ -36,6 +36,15 @@ module Queries
 
     def build_icon_url(response)
       icon_url = "https://openweathermap.org/img/wn/#{response["weather"].first["icon"]}@2x.png"
+    end
+
+    def build_weather_struct(response_json:, icon_url:)
+      Structs::Weather.new(
+        icon_url:,
+        main: response_json["weather"].first["main"],
+        description: response_json["weather"].first["description"],
+        temp: response_json["main"]["temp"]
+      )
     end
   end
 end
